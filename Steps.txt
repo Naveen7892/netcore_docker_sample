@@ -1,0 +1,25 @@
+https://medium.com/@vnqmai.hcmue/deploy-asp-net-core-to-heroku-for-free-using-docker-bd6d6fc161ae (GOOD) (Switch to Linux Containers)
+>> heroku login
+>> heroku container:login
+>> heroku apps:create dncore
+>> dotnet publish -c Release
+or
+>> dotnetbuild D:\NaveenKumar\Learning\C#\dotnetcore\webapi-test/webapi-test.csproj /property:GenerateFullPaths=true /consoleloggerparameters:NoSummary
+
+In publish/Dockerfile:
+	FROM microsoft/dotnet:3.1
+	WORKDIR /app
+	COPY . .
+	CMD ASPNETCORE_URLS=http://*:$PORT dotnet webapi-test.dll
+
+>> docker built -t dnctest .
+SECURITY WARNING: You are building a Docker image from Windows against a non-Windows Docker host. All files and directories added to build context will have '-rwxr-xr-x' permissions. It is recommended to double check and reset permissions for sensitive files and directories.
+
+>> docker tag dnctest registry.heroku.com/dncore/web
+>> docker push registry.heroku.com/dncore/web
+
+>> heroku container:release web -a dncore
+(app not working.)
+https://stackoverflow.com/a/59185091/5276297
+- add this line in .csproj, <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+(app worked)
